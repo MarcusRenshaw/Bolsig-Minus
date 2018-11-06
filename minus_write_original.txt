@@ -1,0 +1,96 @@
+
+file = open(r"C:\Users\Knowhow\Desktop\Bolsig\He\He.txt","w") 
+
+file.write("READCOLLISIONS\n")  #Read collisions
+file.write("ItikawaH2O.txt\n")  #Filename
+file.write("H2O\n")             #Species
+file.write("1\n")               #Extrapolate: 0= No 1= Yes
+ 
+file.write("\n") 
+file.write("READCOLLISIONS\n")  #Read collisions
+file.write("TrinMorgO.txt\n")   #Filename
+file.write("O\n")               #Species
+file.write("1\n")               #Extrapolate: 0= No 1= Yes
+file.write("\n")
+
+file.write("\n") 
+file.write("READCOLLISIONS\n")  #Read collisions
+file.write("BiagiN2.txt\n")     #Filename
+file.write("N2\n")              #Species
+file.write("1\n")               #Extrapolate: 0= No 1= Yes
+file.write("\n")
+
+file.write("\n") 
+file.write("READCOLLISIONS\n")  #Read collisions
+file.write("BiagiHE.txt\n")     #Filename
+file.write("He\n")              #Species
+file.write("1\n")               #Extrapolate: 0= No 1= Yes
+file.write("\n")
+
+for c in range(0,25):
+    for b in range(0,25):
+        for a in range(0,25):
+            file.write("CONDITIONS\n")
+            
+            hydrogen = 0.001*a                  #a represents H2O content
+            hydrogen = round(hydrogen,3)
+            oxygen = 0.001*b                    #b represenets oxygen
+            oxygen = round(oxygen,3)
+            nitrogen = 0.001*c                  #c represents nitrogen
+            nitrogen = round(nitrogen,3)
+            
+            helium = 1 - hydrogen - oxygen - nitrogen   #helium is calculated as 1 minus the other gas contents
+            
+            helium = round(helium,3)
+            
+            file.write("VAR\n")                     #Electric field
+            file.write("0.\n")                      #Angular frequency
+            file.write("0.\n")                      #Cosine of E-B field
+            file.write("300.\n")                    #Gas temp
+            file.write("300.\n")                    #Excitation Temp
+            file.write("0.\n")                      #Transition Energy
+            file.write("0.\n")                      #Ionization Degree
+            file.write("1e18\n")                    #Plasma Density
+            file.write("0.\n")                      #Ion charge Parameter
+            file.write("1.\n")                      #Ion/neutral mass ratio
+            file.write("1\n")                       #e-e momentum effects: 0=No; 1=Yes
+            file.write("1\n")                       #Energy sharing: 1=Equal; 2=One takes all
+            file.write("1\n")                       #Growth: 1=Temporal;2=Spatial;3=Not included; 4=Grad-n expansion
+            file.write("0.\n")                      #Maxwellian mean energy(eV)
+            file.write("100\n")                     #No. of grid points
+            file.write("0\n")                       #Manual grid: 0=No; 1=Linear; 2=Parabolic
+            file.write("-1.0\n")                    #Manual maximum energy (eV)
+            file.write("1e-10\n")                   #Precision
+            file.write("1e-5\n")                    #Convergence
+            file.write("2000\n")                    #Maximum # of iterations
+            file.write("{a} {b} {c} {d}\n".format(a=hydrogen,b=oxygen,c=nitrogen,d=helium)) #Gas composition fractions
+            file.write("1\n")                       #Normalize composition to unity: 0=No; 1=Yes
+            file.write("\n") 
+        
+            #This can be "RUN" for a single reduced electric field value. Refer to manual.
+            file.write("RUNSERIES\n")       #Runs a series of reduced electric field measurements
+            file.write("1\n")               #Variable: 1=E/N
+            file.write("1 1000.\n")         # Min Max
+            file.write("40\n")              #Number of runs
+            file.write("3\n")               #Type: 1=Linear;3=Exponential
+            file.write("\n")
+
+            file.write("SAVERESULTS\n")         #Save results
+            file.write("Helium_{a}_{b}_{c}.txt\n".format(a=hydrogen,b=oxygen,c=nitrogen))   #filename
+            file.write("2\n")                   #Format: 1=Run by run; 2=Combined;3=E/N
+            file.write("0\n")                   #Conditions: 0=N0;1=Yes
+            file.write("1\n")                   #Transport coeefs
+            file.write("0\n")                   #Rate coeffs
+            file.write("0\n")                   #Reverse Rate coeffs
+            file.write("0\n")                   #Energy loss coeffs
+            file.write("0\n")                   #Distribution function
+            file.write("0\n")                   #Skip failed runs
+            file.write("0\n")                   #Include cross sections
+            file.write("\n")
+            
+            file.write("CLEARRUNS")             #Clearing runs is necessary for larger collection as Bolsig has a run limit. Each run is saved above individually.
+            file.write("\n")
+            
+
+
+
